@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>取号排队系统</title>
+</head>
+<body>
+  <h1>欢迎使用排队系统</h1>
+  <input id="name" placeholder="请输入名字">
+  <button onclick="getNumber()">取号</button>
+  <button onclick="showQueue()">查看队列</button>
+
+  <p id="result"></p>
+  <ul id="queue"></ul>
+
+  <script>
+    async function getNumber() {
+      let name = document.getElementById("name").value;
+      let res = await fetch("/get_number", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name: name})
+      });
+      let data = await res.json();
+      if (data.status == 0){document.getElementById("result").innerText = "你的号码是：" + data.number;}
+      else {document.getElementById("result").innerText = "请输入名字"}
+    }
+
+  </script>
+</body>
+</html>
