@@ -44,7 +44,8 @@ async def check_position(request: request):
     return {"number": user_number, "waiting": waiting_count}
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render 会提供 PORT 环境变量
+    app.run(host="0.0.0.0", port=port)
 '''
 @app.route('/')
 def hello_world():
