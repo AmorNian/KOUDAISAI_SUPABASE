@@ -13,19 +13,33 @@
   <p id="result"></p>
   <ul id="queue"></ul>
 
-  <script>
-    async function getNumber() {
-      let name = document.getElementById("name").value;
-      let res = await fetch("/get_number", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name: name})
-      });
-      let data = await res.json();
-      if (data.status == 0){document.getElementById("result").innerText = "你的号码是：" + data.number;}
-      else {document.getElementById("result").innerText = "请输入名字"}
+<script>
+  async function getNumber() {
+    let name = document.getElementById("name").value;
+
+    if (!name) {
+      document.getElementById("result").innerText = "请输入名字";
+      return;
     }
 
-  </script>
+    // 等待 fetch 返回结果
+    let res = await fetch("/get_number", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ name: name })
+    });
+
+    // 等待解析 JSON
+    let data = await res.json();
+
+    // 更新网页显示
+    if (data.status == 0) {
+      document.getElementById("result").innerText = "你的号码是：" + data.number;
+    } else {
+      document.getElementById("result").innerText = "取号失败，请重试";
+    }
+  }
+</script>
+
 </body>
 </html>

@@ -12,18 +12,19 @@ supabase: Client = create_client(url, key)
 def home():
     return render_template("index.html")
 
-@app.route("/get_number")
-async def get_number(request: request):
-    data = await request.json()
+@app.route("/get_number", methods=['POST'])
+def get_number():
+    data = request.json
     name = data["name"]
-
+    if len(name) == 0:
+        return {"status": 1}
     # 获取当前最大号码
-    res = supabase.table("queue").select("number").order("number", desc=True).limit(1).execute()
-    max_number = res.data[0]["number"] if res.data else 0
+    res = supabase.table("User").select("id").order("id", desc=True).limit(1).execute()
+    max_number = res.data[0]["id"] if res.data else 0
 
     new_number = max_number + 1
-    supabase.table("queue").insert({"name": name, "number": new_number, "status": "waiting"}).execute()
-    return {"number": new_number}
+    supabase.table("User").insert({"name": name, "id": new_number, "status": 0, "time_start":"10:10"}).execute()
+    return {"number": new_number, "status": 0}
 
 # ===== 查询前方人数接口 =====
 @app.route("/check_position")
