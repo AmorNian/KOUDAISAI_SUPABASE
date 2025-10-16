@@ -1,45 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <title>取号排队系统</title>
+  <meta charset="UTF-8">
+  <title>排队取号系统</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #f0f8ff, #cde0ff);
+      text-align: center;
+      padding-top: 80px;
+    }
+    h2 {
+      color: #2a35ff;
+      margin-bottom: 30px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 220px;
+      outline: none;
+    }
+    button {
+      padding: 10px 18px;
+      margin-left: 8px;
+      background-color: #4e73df;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #3756c0;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>欢迎使用排队系统</h1>
-  <input id="name" placeholder="请输入名字">
+  <h2>排队取号系统</h2>
+  <img src="/static/pic/input.png" alt="lab logo" width="60" height="60">
+  <input type="text" id="name" placeholder="请输入姓名">
   <button onclick="getNumber()">取号</button>
-  <button onclick="showQueue()">查看队列</button>
-
   <p id="result"></p>
-  <ul id="queue"></ul>
 
-<script>
-  async function getNumber() {
-    let name = document.getElementById("name").value;
+  <script>
+    async function getNumber() {
+      let name = document.getElementById("name").value;
+      if (!name) {
+        document.getElementById("result").innerText = "请输入名字";
+        return;
+      }
 
-    if (!name) {
-      document.getElementById("result").innerText = "请输入名字";
-      return;
+      let res = await fetch("/get_number", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name })
+      });
+
+      let data = await res.json();
+      if (data.status == 0) {
+        document.getElementById("result").innerText = "你的号码是：" + data.number;
+      } else {
+        document.getElementById("result").innerText = "取号失败，请重试";
+      }
     }
-
-    // 等待 fetch 返回结果
-    let res = await fetch("/get_number", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ name: name })
-    });
-
-    // 等待解析 JSON
-    let data = await res.json();
-
-    // 更新网页显示
-    if (data.status == 0) {
-      document.getElementById("result").innerText = "你的号码是：" + data.number;
-    } else {
-      document.getElementById("result").innerText = "取号失败，请重试";
-    }
-  }
-</script>
-
+  </script>
 </body>
 </html>
+
