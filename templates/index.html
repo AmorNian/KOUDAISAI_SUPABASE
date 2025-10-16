@@ -50,15 +50,17 @@
   <img src="/static/pic/input.png" alt="lab logo" width="60" height="60">
   <input type="text" id="name" placeholder="请输入姓名">
   <button onclick="getNumber()">取号</button>
+  <button onclick="checkPosition()">查询</button>
+  <button onclick="adminLogin()">管理员登陆</button>
   <p id="result"></p>
 
   <script>
     async function getNumber() {
       let name = document.getElementById("name").value;
-      if (!name) {
+/*       if (!name) {
         document.getElementById("result").innerText = "请输入名字";
         return;
-      }
+      } */
 
       let res = await fetch("/get_number", {
         method: "POST",
@@ -69,9 +71,36 @@
       let data = await res.json();
       if (data.status == 0) {
         document.getElementById("result").innerText = "你的号码是：" + data.number;
+      } else if (data.status == 2) {
+        document.getElementById("result").innerText = "名字已被使用！";
       } else {
-        document.getElementById("result").innerText = "取号失败，请重试";
+        document.getElementById("result").innerText = "请输入名字";
       }
+    }
+
+    async function checkPosition() {
+      let name = document.getElementById("name").value;
+      if (!name) {
+        document.getElementById("result").innerText = "请输入名字";
+        return;
+      }
+
+      let res = await fetch("/check_position", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name })
+      });
+
+      let data = await res.json();
+      if (data.status == 1) {
+        document.getElementById("result").innerText = "User not found";
+      } else {
+        document.getElementById("result").innerText = "前方等待：" + data.waiting + "人";
+      }
+    }
+
+    async function adminLogin() {
+      window.location.href = "/adminlogin"; 
     }
   </script>
 </body>
