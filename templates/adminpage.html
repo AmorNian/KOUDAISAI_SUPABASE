@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>排队取号系统</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #f0f8ff, #cde0ff);
+      text-align: center;
+      padding-top: 80px;
+    }
+    h2 {
+      color: #2a35ff;
+      margin-bottom: 30px;
+    }
+  .admin-container {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .called-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .called-item {
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 10px 15px;
+    min-width: 120px;
+  }
+
+  .action-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  </style>
+</head>
+
+
+<body>
+  <div class="admin-container">
+    <h2>現在呼び出し中の番号 / Currently Calling</h2>
+
+    <div id="called-list" class="called-list">
+      <!-- 动态显示最多5个用户 -->
+    </div>
+
+    <button id="next-call" class="next-btn">次の5人を呼び出す / Call Next 5</button>
+  </div>
+
+  <script>
+    async function callNextFive() {
+      const { data: waitingUsers } = await supabase
+      .from("User")
+      .select("*")
+      .eq("status", "waiting")
+      .order("id", { ascending: true })
+      .limit(5);
+
+    // 更新状态为 “called”，并增加叫号次数
+      const ids = waitingUsers.map(u => u.id);
+      await supabase
+      .from("User")
+      .update({ status: "called", call_count: supabase.sql`call_count + 1` })
+      .in("id", ids);
+
+      showCalledList(waitingUsers);
+    }
+
+    function showCalledList(users) {
+      const container = document.getElementById("called-list");
+      container.innerHTML = "";
+
+      users.forEach(u => {
+        const div = document.createElement("div");
+        div.className = "called-item";
+        div.innerHTML = `
+          <div>番号 / No. ${u.id}</div>
+          <div class="action-btns">
+            <button onclick="updateStatus(${u.id}, 'arrived')">✅ 来た</button>
+            <button onclick="updateStatus(${u.id}, 'pass')">⏭ Pass</button>
+            <button onclick="updateStatus(${u.id}, 'missed')">❌ Miss</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>

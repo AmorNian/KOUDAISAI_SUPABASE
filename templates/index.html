@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>排队取号系统</title>
+  <title>阪口・タン研究室へようこそ！<br>Welcome to Sakaguchi-Tran Lab</title>
   <style>
     body {
       font-family: "Microsoft YaHei", sans-serif;
@@ -11,7 +11,7 @@
       padding-top: 80px;
     }
     h2 {
-      color: #2a35ff;
+      color: #030412;
       margin-bottom: 30px;
     }
     input {
@@ -19,12 +19,14 @@
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      width: 220px;
+      width: 250px;
       outline: none;
+      margin-top: 15px;
     }
     button {
       padding: 10px 18px;
       margin-left: 8px;
+      margin-top: 15px;
       background-color: #4e73df;
       color: white;
       border: none;
@@ -42,25 +44,47 @@
       font-weight: bold;
       color: #333;
     }
+    #adminBtn {
+      position: absolute;   /* 绝对定位 */
+      top: 20px;            /* 距离页面顶部 20px */
+      right: 20px;          /* 距离页面右侧 20px */
+      background-color: #4e73df;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #adminBtn:hover {
+      background-color: #3756c0;
+    }
   </style>
 </head>
 
 <body>
-  <h2>排队取号系统</h2>
+  <h2>阪口・タン研究室へようこそ！<br>Welcome to Sakaguchi-Tran Lab</h2>
   <img src="/static/pic/input.png" alt="lab logo" width="60" height="60">
-  <input type="text" id="name" placeholder="请输入姓名">
-  <button onclick="getNumber()">取号</button>
-  <button onclick="checkPosition()">查询</button>
-  <button onclick="adminLogin()">管理员登陆</button>
+  <p style="font-size:18px; color:#000000; margin-top:15px;">
+  整理券システム Queue System
+  </p>
+  <br>
+  <input type="text" id="name" placeholder="名前入力 Please input your name ">
+  <br> 
+  <button onclick="getNumber()">番号を取る<br>Get an order</button>
+  <button onclick="checkPosition()">情報確認<br>Info check</button>
+  <button id="adminBtn" onclick="adminLogin()">AdminPage</button>
   <p id="result"></p>
+  <p style="font-size:18px; color:#000000; margin-top:15px;">
+  ルール Rules
+  誰か作って
+  </p>
 
   <script>
     async function getNumber() {
       let name = document.getElementById("name").value;
-/*       if (!name) {
-        document.getElementById("result").innerText = "请输入名字";
-        return;
-      } */
 
       let res = await fetch("/get_number", {
         method: "POST",
@@ -70,18 +94,18 @@
 
       let data = await res.json();
       if (data.status == 0) {
-        document.getElementById("result").innerText = "你的号码是：" + data.number;
+        document.getElementById("result").innerHTML = "あなたの番号は：" + data.number + "<br>Your number is: " + data.number;;
       } else if (data.status == 2) {
-        document.getElementById("result").innerText = "名字已被使用！";
+        document.getElementById("result").innerHTML = "名前は占用されました！" + "<br>Your name has been used!";
       } else {
-        document.getElementById("result").innerText = "请输入名字";
+        document.getElementById("result").innerHTML = "名前を入力してください！" + "<br>Pleasr input your name first!";
       }
     }
 
     async function checkPosition() {
       let name = document.getElementById("name").value;
       if (!name) {
-        document.getElementById("result").innerText = "请输入名字";
+        document.getElementById("result").innerHTML = "名前を入力してください！" + "<br>Pleasr input your name first!";
         return;
       }
 
@@ -92,10 +116,14 @@
       });
 
       let data = await res.json();
-      if (data.status == 1) {
-        document.getElementById("result").innerText = "User not found";
-      } else {
-        document.getElementById("result").innerText = "前方等待：" + data.waiting + "人";
+      if (data.status == "no user") {
+        document.getElementById("result").innerHTML = "名前は見つかりません" + "<br>User not found";
+      }else if (data.status == "passed"){
+        document.getElementById("result").innerHTML = "お呼びしましたが、ご不在のため次の順番で再度お呼びいたします" + "<br>We called your number, but you were not present. You will be called again in the next round.";
+      }else if (data.status == "expired"){
+        document.getElementById("result").innerHTML = "2回お呼びしましたが、ご不在のため、番号は無効となりました。再度受付をお願いいたします。" + "<br>Your number has been called twice with no response. It has been cancelled. Please take a new number.";
+      }else {
+        document.getElementById("result").innerHTML = "あなたの前には：" + data.waiting + "人がいます"　+ "<br>There are "+ data.waiting + " people ahead of you";
       }
     }
 
