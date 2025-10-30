@@ -44,6 +44,12 @@
       font-weight: bold;
       color: #333;
     }
+    #waiting_info {
+      margin-top: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #d71717;
+    }
     #adminBtn {
       position: absolute;   /* 绝对定位 */
       top: 20px;            /* 距离页面顶部 20px */
@@ -67,9 +73,11 @@
 <body>
   <h2>阪口・タン研究室へようこそ！<br>Welcome to Sakaguchi-Tran Lab</h2>
   <img src="/static/pic/input.png" alt="lab logo" width="60" height="60">
-  <p style="font-size:18px; color:#000000; margin-top:15px;">
+  <p style="font-size:25px; color:#000000; margin-top:15px;">
   整理券システム Queue System
   </p>
+  <br>
+  <p id=waiting_info style="font-size:18px; color:#000000; margin-top:15px;"></p>
   <br>
   <input type="text" id="name" placeholder="名前入力 Please input your name ">
   <br> 
@@ -78,7 +86,7 @@
   <button id="adminBtn" onclick="adminLogin()">AdminPage</button>
   <p id="result"></p>
   <p style="font-size:18px; color:#000000; margin-top:15px;">
-  ルール Rules
+  ルール Rules<br>
   誰か作って
   </p>
 
@@ -122,14 +130,39 @@
         document.getElementById("result").innerHTML = "お呼びしましたが、ご不在のため次の順番で再度お呼びいたします" + "<br>We called your number, but you were not present. You will be called again in the next round.";
       }else if (data.status == "expired"){
         document.getElementById("result").innerHTML = "2回お呼びしましたが、ご不在のため、番号は無効となりました。再度受付をお願いいたします。" + "<br>Your number has been called twice with no response. It has been cancelled. Please take a new number.";
-      }else {
+      }else if (data.status == "checked"){
+        document.getElementById("result").innerHTML = "ご体験ありがとうございました！" + "<br>Thank you for your playing!";
+      }
+      else {
         document.getElementById("result").innerHTML = "あなたの前には：" + data.waiting + "人がいます"　+ "<br>There are "+ data.waiting + " people ahead of you";
+      }
+    }
+
+    async function getWaitingNum(){
+      try {
+        const res = await fetch("/get_queue_length");
+        const data = await res.json();
+
+        if (data.status == 0) {
+          document.getElementById("waiting_info").innerHTML = `
+            現在の待ち人数：${data.queue_length}<br>
+            予想待ち時間：${data.queue_time}分<br>
+            現在呼び出し中の番号 Now Calling：${data.index}番
+          `
+        } else {
+          document.getElementById("waiting_info").innerText = "エラー発生";
+        }
+      } catch (err) {
+        document.getElementById("waiting_info").innerText = "エラー発生2";
+        console.error(err);
       }
     }
 
     async function adminLogin() {
       window.location.href = "/adminlogin"; 
     }
+
+    setInterval(getWaitingNum, 3000);
   </script>
 </body>
 </html>

@@ -79,13 +79,94 @@ def admin_login():
     else:
         return {"status": 1}
     
-# ===== 查询叫号名单 =====
-@app.route("/get_waiting_list", methods=['POST'])
-def get_waiting_list():
-    num_limit = 5
-    waiting_list = supabase.table("User").select("*")\
-        .in_("status", ["waiting", "passed"]).order("id", desc=False).limit(num_limit).execute()
-    return waiting_list
+# ===== 查询下一个用户 =====
+@app.route("/get_next_user", methods=['POST'])
+def get_next_user():
+    data = request.json
+    current_id = data["current_id"]
+    num_limit = 1
+    next_user = supabase.table("User").select("*")\
+        .gt("id",current_id).in_("status", ["waiting", "passed"]).order("id", desc=False).limit(num_limit).execute()
+    if not next_user.data:
+        return {"status":1}
+    else:
+        return {"data":next_user.data,"status":0}
+
+# ===== check当前用户 =====
+@app.route("/check_current_user", methods=['POST'])
+def check_current_user():
+    data = request.json
+    current_id = data["current_id"]
+    res = supabase.table("User").select("*").eq("id",current_id).execute()
+    if res.data[0]["status"] == "checked":
+        return {"status":2,"data":res.data}
+    res = supabase.table("User").update({"status": "checked",\
+                                         "time_start":datetime.now().strftime("%Y-%m-%d %H:%M:%S")})\
+                                            .eq("id", current_id).execute()
+    if not res.data:
+        print("update error:")
+        return {"status":1}
+    elif res.data[0]["status"] == "expired":
+        return {"status":3,"data":res.data}
+    else:
+        return {"status":0,"data":res.data}
+    
+# ===== pass当前用户 =====
+@app.route("/pass_current_user", methods=['POST'])
+def pass_current_user():
+    data = request.json
+    current_id = data["current_id"]
+
+    current_user = supabase.table("User").select("*")\
+        .eq("id",current_id).execute()
+    if current_user.data[0]["status"] == "waiting":
+        res = supabase.table("User").update({"status": "passed"}).eq("id", current_id).execute()
+        if res:
+            return {"status":"passed","data":current_user.data}
+    elif current_user.data[0]["status"] == "passed":
+        res = supabase.table("User").update({"status": "expired"}).eq("id", current_id).execute()
+        if res:
+            return {"status":"expired","data":current_user.data}
+    else:
+        print("update error:")
+        return {"status":"error"}
+        
+    print("update error:")
+    return {"status":"error"}
+
+
+# ===== 显示队列长度 =====
+@app.route("/get_queue_length", methods=["GET"])
+def get_queue_length():
+    time_per_group = 10
+    user_per_group = 5
+    queue_list = supabase.table("User").select("*")\
+        .in_("status", ["waiting", "passed"]).execute()
+    queue_length = len(queue_list.data)
+    if queue_length == 0:
+        queue_time = 0
+    else:
+        queue_time = (queue_length  // user_per_group + 0.5) * time_per_group
+    res = supabase.table("User").select("id").eq("status", "checked") \
+        .order("id", desc=True).limit(1).execute()
+    if not res.data:
+        index = "Null"
+    else:
+        index = res.data[0]["id"]
+    return {"status":0, "queue_length":queue_length,"queue_time":queue_time,"index":index}
+
+# ===== 修改状态 =====
+@app.route("/status_change", methods=["POST"])
+def status_change():
+    data = request.json
+    new_status = data["new_status"]
+    target_id = data["target_id"]
+    res = supabase.table("User").select("*").eq("id",target_id).execute()
+    if not res.data:
+        return {"status":1}
+    else:
+        res = supabase.table("User").update({"status":new_status}).eq("id",target_id).execute()
+        return {"status":0, "data":res.data}
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Render 会提供 PORT 环境变量
