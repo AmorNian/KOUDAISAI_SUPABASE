@@ -4,54 +4,127 @@
   <meta charset="UTF-8">
   <title>排队取号系统</title>
   <style>
-    body {
-      font-family: "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #f0f8ff, #cde0ff);
-      text-align: center;
-      padding-top: 80px;
-    }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #e8f0ff, #f9fbff);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h2 {
+    color: #1a1a40;
+    margin-top: 60px;
+    margin-bottom: 25px;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+
+  .admin-container {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 600px;
+  }
+
+  .called-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .called-item {
+    border: 2px solid #4e73df;
+    border-radius: 10px;
+    padding: 10px 15px;
+    min-width: 120px;
+    background: #f3f6ff;
+  }
+
+  .action-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    font-size: 15px;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(78,115,223,0.2);
+    margin-top: 10%;
+  }
+
+  button:hover {
+    background-color: #3b5bcc;
+    transform: translateY(-1px);
+  }
+
+  .button-group {
+  display: flex;          /* 👈 横向排列 */
+  justify-content: center;/* 👈 居中对齐 */
+  gap: 10px;              /* 👈 按钮间距 */
+  flex-wrap: wrap;        /* 👈 窄屏自动换行 */
+  }
+
+  input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1.5px solid #c5cae9;
+    width: 70%;
+    max-width: 300px;
+    outline: none;
+    margin-top: 15px;
+    transition: 0.2s;
+  }
+
+  input:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 6px rgba(78,115,223,0.3);
+  }
+
+  @media (max-width: 600px) {
     h2 {
-      color: #2a35ff;
-      margin-bottom: 30px;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 220px;
-      outline: none;
+      font-size: 22px;
+      margin-top: 40px;
     }
     button {
-      padding: 10px 18px;
-      margin-left: 8px;
-      background-color: #4e73df;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
+      font-size: 14px;
+      padding: 9px 14px;
     }
-    button:hover {
-      background-color: #3756c0;
+    input {
+      width: 85%;
     }
-    #result {
-      margin-top: 30px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #333;
-    }
-  </style>
+  }
+</style>
+
 </head>
 
 
 <body>
   <h2>Administrator Login</h2>
   <input type="text" id="password" placeholder="password">
-  <button onclick="login()">login</button>
-  <button onclick="back()">return</button>
-
+  <div class="button_group">
+    <button onclick="login()">login</button>
+    <button onclick="back()">return</button>
+  </div>
   <p id="result"></p>
   <p>部外者は“return”ボタンを押してください</p> 
   <p></p>Visitors please click "return" button</p> 

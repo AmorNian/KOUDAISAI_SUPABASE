@@ -22,6 +22,10 @@ def adminlogin():
 def adminpage():
     return render_template("adminpage.html")
 
+@app.route('/go_signagepage')
+def gosignagepage():
+    return render_template("signagepage.html")
+
 # ===== 新用户注册 =====
 @app.route("/get_number", methods=['POST'])
 def get_number():

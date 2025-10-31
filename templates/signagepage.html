@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Signage</title>
+    <style>
+    /* 全局设置 */
+    body {
+        height: 1920px;
+        width: 1080px;
+        background: linear-gradient(180deg, #198ae1 0%, #e0e2e4 100%);
+        color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+        text-align: center;
+    }
+    .overlay {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        backdrop-filter: blur(8px);
+        }
+
+    /* 标题部分 */
+    h2 {
+        color: #fafaff;
+        margin-top: 60px;
+        margin-bottom: 25px;
+        font-size: 60px;
+        letter-spacing: 1px;
+        
+    }
+    .content-container {
+        display: flex;              /* 横向排列子元素 */
+        justify-content: center;    /* 居中对齐整体 */
+        align-items: center;        /* 垂直居中 */
+        gap: 20px;                  /* 图片与文字的间距 */
+        margin-top: 40px;
+    }
+    #sensei {
+        width: 440px;
+        height: 500px;
+    }
+
+    #info_disp{
+        color: #ffffff;
+        font-size: 40px;
+        font-weight: 500;
+        line-height: 1.8;
+        text-align: left;
+        max-width: 550px;;
+    }
+
+    .info-section {
+        width: 99%;
+        height: 380px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 35px;
+        background: linear-gradient(135deg, #e7eeff, #c8d8ff);
+        border-top: 3px solid #4e73df;
+        border-bottom: 3px solid #4e73df;
+        padding: 40px 0;
+        margin-top: 5px;
+    }
+    /* 每个子块 */
+    .info-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* 宣传图 / 二维码图片 */
+    .info-img {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        margin-bottom: 15px;
+    }
+
+    .info-img2 {
+        width: 270px;
+        height: 330px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        margin-bottom: 15px;
+    }
+
+    /* 文字说明 */
+    .info-text {
+        font-size: 24px;
+        color: #333;
+        font-weight: 500;
+        line-height: 1.6;
+        max-width: 300px;
+    }
+
+    /* 当前预约状态显示区 */
+    #booking-status {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 20px 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        font-size: 30px;
+        color: #1d2d70;
+        font-weight: bold;
+        min-width: 210px;
+        text-align: center;
+    }
+
+    /* 左右两张宣传图区域 */
+    .promo-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+        /* 小标题 */
+    .promo-title {
+        font-size: 22px;
+        color: #000001;
+        font-weight: bold;
+    }
+
+        /* 说明文字区 */
+    #promo-text {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 20px 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        font-size: 30px;
+        color: #1d2d70;
+        font-weight: bold;
+        min-width: 210px;
+        text-align: center;
+    }
+    #city {
+        width: 100%;
+        height: 200px;
+    }
+    </style>
+
+</head>
+
+<body>
+    <h2>阪口・タン研究室へようこそ！<br>Welcome to Sakaguchi-Tran Lab</h2>
+
+    <div class="content-container">
+        <img id="sensei" src="/static/pic/sensei.png" alt="sensei">
+        <p id="info_disp">
+            本日開催イベント：<br>
+            VR模擬運転体験(整理券制)<br>
+            スマート農業・オーシャン<br>
+            次世代の災害救助・通信補助<br>
+            ポスター展示
+        </p>
+    </div>
+
+    <div class="info-section">
+        <!-- 宣传图 -->
+        <div class="info-block">
+            <img src="/static/pic/smart.png" class="info-img" alt="smart">
+            <p class="info-text">VR模擬運転体験<br>VR Driving <S></S>imulation</p>
+        </div>
+
+        <!-- 二维码 -->
+        <div class="info-block">
+            <img src="/static/pic/QR.png" class="info-img" alt="QR code">
+            <p class="info-text">スマホから予約できます！<br>Scan to Book Now</p>
+        </div>
+
+        <!-- 当前预约状态 -->
+        <div class="info-block">
+            <p id="booking-status"></p>
+            <p class="info-text">場所:Room906</p>
+        </div>
+    </div>
+    <div class="info-section">
+        <!-- 宣传图1 -->
+        <div class="info-block">
+            <img src="/static/pic/smart.png" class="info-img" alt="smart">
+            <h3 class="promo-title">スマート社会<br>Smart Argiculture・Ocean</h3>
+        </div>
+
+        <!-- 宣传图2 -->
+        <div class="info-block">
+            <img src="/static/pic/drone.png" class="info-img" alt="drone">
+            <h3 class="promo-title">次世代の災害救助<br>Disaster Relief<br></h3>
+        </div>
+
+        <!-- 说明文字 -->
+        <div class="info-block">
+            <p id="promo-text">
+            (説明)<br>
+            ご自由にご入室ください！
+            </p>
+            <p class="info-text">場所:Room914</p>
+        </div>
+    </div>
+    <img id="city" src="/static/pic/city.png" alt="city">
+
+
+  <script>
+    async function getWaitingNum(){
+      try {
+        const res = await fetch("/get_queue_length");
+        const data = await res.json();
+
+        if (data.status == 0) {
+          document.getElementById("booking-status").innerHTML = `
+            現在の待ち人数：${data.queue_length}<br>
+            予想待ち時間：${data.queue_time}分<br>
+            現在呼び出し中の番号<br> 
+            Now Calling：${data.index}番
+          `
+        } else {
+          document.getElementById("booking-status").innerText = "エラー発生";
+        }
+      } catch (err) {
+        document.getElementById("booking-status").innerText = "エラー発生2";
+        console.error(err);
+      }
+    }
+    setInterval(getWaitingNum, 3000);
+  </script>
+</body>
+</html>
+

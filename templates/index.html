@@ -4,70 +4,122 @@
   <meta charset="UTF-8">
   <title>阪口・タン研究室へようこそ！<br>Welcome to Sakaguchi-Tran Lab</title>
   <style>
-    body {
-      font-family: "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #f0f8ff, #cde0ff);
-      text-align: center;
-      padding-top: 80px;
-    }
+  /* 全局设置 */
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #e8f0ff, #f9fbff);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* 标题部分 */
+  h2 {
+    color: #1a1a40;
+    margin-top: 60px;
+    margin-bottom: 25px;
+    font-size: 28px;
+    letter-spacing: 1px;
+  }
+
+  /* 输入框 */
+  input {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1.5px solid #c5cae9;
+    width: 80%;
+    max-width: 280px;
+    outline: none;
+    transition: 0.2s;
+  }
+
+  input:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 6px rgba(78, 115, 223, 0.3);
+  }
+
+  /* 按钮样式 */
+  button {
+    padding: 10px 22px;
+    margin-top: 20px;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(78, 115, 223, 0.2);
+  }
+
+  button:hover {
+    background-color: #3b5bcc;
+    transform: translateY(-1px);
+  }
+
+  /* 信息显示卡片 */
+  #waiting_info, #result {
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 85%;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  #waiting_info {
+    color: #d71717;
+  }
+
+  /* 管理员按钮固定右上角 */
+  #adminBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(78,115,223,0.3);
+    transition: 0.3s;
+  }
+
+  #adminBtn:hover {
+    background-color: #3756c0;
+  }
+
+  /* 响应式适配 */
+  @media (max-width: 600px) {
     h2 {
-      color: #030412;
-      margin-bottom: 30px;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 250px;
-      outline: none;
-      margin-top: 15px;
+      font-size: 22px;
+      margin-top: 40px;
     }
     button {
-      padding: 10px 18px;
-      margin-left: 8px;
-      margin-top: 15px;
-      background-color: #4e73df;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
+      font-size: 15px;
+      padding: 9px 18px;
     }
-    button:hover {
-      background-color: #3756c0;
+    input {
+      width: 90%;
     }
-    #result {
-      margin-top: 30px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #333;
+    #waiting_info, #result {
+      font-size: 18px;
     }
-    #waiting_info {
-      margin-top: 30px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #d71717;
-    }
-    #adminBtn {
-      position: absolute;   /* 绝对定位 */
-      top: 20px;            /* 距离页面顶部 20px */
-      right: 20px;          /* 距离页面右侧 20px */
-      background-color: #4e73df;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #adminBtn:hover {
-      background-color: #3756c0;
-    }
+  }
   </style>
+
 </head>
 
 <body>

@@ -42,7 +42,7 @@
   }
 
   button {
-    padding: 6px 10px;
+    padding: 10px 13px;
     border-radius: 8px;
     cursor: pointer;
     margin-top: 5px;
@@ -56,11 +56,41 @@
     outline: none;
     margin-top: 15px;
   }
+
+  .calling .change{
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 85%;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  .signageBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(78,115,223,0.3);
+    transition: 0.3s;
+  }
   </style>
 </head>
 
 
 <body>
+  <button id="signageBtn" onclick="go_signagepage()">サイネージ展示ページ</button>
   <div class="admin-container">
     <h2>現在呼び出し中の番号 / Currently Calling</h2>
     <p id="calling"></p><br>
@@ -101,7 +131,7 @@
         const user_id = next_user.data[0].id;
         const user_name = next_user.data[0].name;
         document.getElementById("calling").innerHTML = `
-        ${user_id}番：${user_name}様
+        ${user_id}番：${user_name}様<br>
         現在のグループ人数：${user_count}人
         `
         current_id = user_id
@@ -209,6 +239,10 @@
           該当ユーザー見つかりません
         `
       }
+    }
+
+    async function go_signagepage() {
+      window.location.href = "/go_signagepage"; 
     }
   </script>
 </body>
