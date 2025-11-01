@@ -33,7 +33,7 @@
         display: flex;              /* 横向排列子元素 */
         justify-content: center;    /* 居中对齐整体 */
         align-items: center;        /* 垂直居中 */
-        gap: 20px;                  /* 图片与文字的间距 */
+        gap: 8px;                  /* 图片与文字的间距 */
         margin-top: 40px;
     }
     #sensei {
@@ -153,7 +153,8 @@
         <img id="sensei" src="/static/pic/sensei.png" alt="sensei">
         <p id="info_disp">
             本日開催イベント：<br>
-            VR模擬運転体験(整理券制)<br>
+            模擬運転ゲーム(整理券制)<br>
+            デジタルツイン自動運転<br>
             スマート農業・オーシャン<br>
             次世代の災害救助・通信補助<br>
             ポスター展示
@@ -163,14 +164,14 @@
     <div class="info-section">
         <!-- 宣传图 -->
         <div class="info-block">
-            <img src="/static/pic/smart.png" class="info-img" alt="smart">
-            <p class="info-text">VR模擬運転体験<br>VR Driving <S></S>imulation</p>
+            <img src="/static/pic/driving.jpg" class="info-img" alt="smart">
+            <p class="info-text">模擬運転体験<br>Driving Simulation</p>
         </div>
 
         <!-- 二维码 -->
         <div class="info-block">
             <img src="/static/pic/QR.png" class="info-img" alt="QR code">
-            <p class="info-text">スマホから予約できます！<br>Scan to Book Now</p>
+            <p class="info-text">ゲーム体験整理券<br>Driving game reservation</p>
         </div>
 
         <!-- 当前预约状态 -->
@@ -213,6 +214,7 @@
 
         if (data.status == 0) {
           document.getElementById("booking-status").innerHTML = `
+            模擬運転体験ゲーム：<br>
             現在の待ち人数：${data.queue_length}<br>
             予想待ち時間：${data.queue_time}分<br>
             現在呼び出し中の番号<br> 
