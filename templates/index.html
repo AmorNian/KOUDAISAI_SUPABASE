@@ -129,18 +129,30 @@
   整理券システム Queue System
   </p>
   <br>
-  <p id=waiting_info style="font-size:18px; color:#000000; margin-top:15px;"></p>
+  <p id=waiting_info style="font-size:18px; color:#000000; margin-top:15px;">
+    現在の待ち人数：<br>
+    予想待ち時間：分<br>
+    現在呼び出し中の番号 Now Calling：番
+  </p>
   <br>
   <input type="text" id="name" placeholder="名前入力 Please input your name ">
   <br> 
   <button onclick="getNumber()">番号を取る<br>Get an order</button>
   <button onclick="checkPosition()">情報確認<br>Info check</button>
   <button id="adminBtn" onclick="adminLogin()">AdminPage</button>
-  <p id="result"></p>
-  <p style="font-size:18px; color:#000000; margin-top:15px;">
-  ルール Rules<br>
-  誰か作って
+  <p id="result">
+    名前を入力して番号お取りください<br>
+    情報確認を押して予約情報確認できます<br>
+    Input name and press Get an order<br>
+    Press Press Info check to check your reservation
   </p>
+  <p style="font-size:23px; color:#000000; margin-top:15px; text-align:left">
+  注意事項<br>
+・高校生ツアーのお客様が優先になります<br>
+・２回目の呼び出しに応じない場合、整理券は無効とさせていただきます<br>
+・機器不良によりＶＲは使用できません。モニターでゲームを行います<br>
+・至らぬ点は"たくさん"ございますが、どうかお楽しみください
+</p>
 
   <script>
     async function getNumber() {
@@ -154,7 +166,11 @@
 
       let data = await res.json();
       if (data.status == 0) {
-        document.getElementById("result").innerHTML = "あなたの番号は：" + data.number + "<br>Your number is: " + data.number;;
+        document.getElementById("result").innerHTML = `
+        あなたの番号は：${data.number}番<br>
+        Your number is: ${data.number}<br>
+        情報確認を押して予約情報確認できます<br>
+        Press Info check to check your reservation`
       } else if (data.status == 2) {
         document.getElementById("result").innerHTML = "名前は占用されました！" + "<br>Your name has been used!";
       } else {
@@ -179,14 +195,34 @@
       if (data.status == "no user") {
         document.getElementById("result").innerHTML = "名前は見つかりません" + "<br>User not found";
       }else if (data.status == "passed"){
-        document.getElementById("result").innerHTML = "お呼びしましたが、ご不在のため次の順番で再度お呼びいたします" + "<br>We called your number, but you were not present. You will be called again in the next round.";
+        document.getElementById("result").innerHTML = `
+        あなたの番号は：${data.id}番<br>
+        Your number is: ${data.id}<br>
+        お呼びしましたが、ご不在のため次の順番で再度お呼びいたします<br>
+        We called your number, but you were not present. You will be called again in the next round.
+        `
       }else if (data.status == "expired"){
-        document.getElementById("result").innerHTML = "2回お呼びしましたが、ご不在のため、番号は無効となりました。再度受付をお願いいたします。" + "<br>Your number has been called twice with no response. It has been cancelled. Please take a new number.";
+        document.getElementById("result").innerHTML = `
+        あなたの番号は：${data.id}番<br>
+        Your number is: ${data.id}<br>
+        2回お呼びしましたが、ご不在のため、番号は無効となりました。再度受付をお願いいたします<br>
+        Your number has been called twice with no response. It has been cancelled. Please take a new number.
+        `
       }else if (data.status == "checked"){
-        document.getElementById("result").innerHTML = "ご体験ありがとうございました！" + "<br>Thank you for your playing!";
+        document.getElementById("result").innerHTML = `
+        あなたの番号は：${data.id}番<br>
+        Your number is: ${data.id}<br>
+        ご体験ありがとうございました！<br>
+        Thank you for your playing!
+        `
       }
       else {
-        document.getElementById("result").innerHTML = "あなたの前には：" + data.waiting + "人がいます"　+ "<br>There are "+ data.waiting + " people ahead of you";
+        document.getElementById("result").innerHTML = `
+        あなたの番号は：${data.id}番<br>
+        Your number is: ${data.id}<br>
+        現在あなたの前には：${data.waiting}人がいます<br>
+        There are ${data.waiting} people waiting ahead of you<br>
+        `
       }
     }
 

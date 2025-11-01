@@ -56,22 +56,26 @@ def check_position():
     name = data["name"]
 
     # 查找用户的号码
-    res = supabase.table("User").select("").eq("name", name).execute()
+    res = supabase.table("User").select("*").eq("name", name).execute()
+    id = res.data[0]["id"]
     # 查看状态
     if not res.data:
         return {"status": "no user"}
     if res.data[0]["status"] == "passed":
-        return {"status": "passed"}
+        return {"status": "passed","id":id}
     if res.data[0]["status"] == "expired":
-        return {"status": "expired"}
+        return {"status": "expired","id":id}
+    if res.data[0]["status"] == "checked":
+        return {"status": "checked","id":id}
     
     user_number = res.data[0]["id"]
     # 查找前方还在等待的人
     res2 = supabase.table("User").select("id")\
         .lt("id", user_number).in_("status", ["waiting", "passed"]).execute()
     waiting_count = len(res2.data)
+    
 
-    return {"number": user_number, "waiting": waiting_count}
+    return {"number": user_number, "waiting": waiting_count,"id":id}
 
 # ===== 管理员登录 =====
 @app.route("/admin_login", methods=['POST'])
